@@ -28,7 +28,7 @@ start_link() ->
 
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
-    Watcher = {spread_os_monitor_worker, {spread_os_monitor_worker, start_link, []}, permanent, 5000, worker, [spread_os_monitor_worker]},
+    Watcher = {spread_os_monitor_watcher, {spread_os_monitor_watcher, start_link, []}, permanent, 5000, worker, [spread_os_monitor_worker]},
     {ok, { {one_for_one, 5, 1}, [Watcher]} }.
 
 %%====================================================================
