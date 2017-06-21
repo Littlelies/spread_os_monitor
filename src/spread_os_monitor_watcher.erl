@@ -60,10 +60,9 @@ handle_info(trigger, State) ->
         {<<"memory">>,
             [{<<"total">>, Total}, {<<"free">>, Free}]
         },
-        {<<"disk">>, DiskStat},
+        %{<<"disk">>, DiskStat},
         {<<"idle_cpu">>, Idle}
     ],
-    lager:info("Encoding ~p", [Report]),
     JsonReport = jsx:encode(Report),
 
     spread:post([<<"os_monitor">>, State#state.self], JsonReport),
