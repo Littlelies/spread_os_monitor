@@ -54,7 +54,7 @@ handle_info(trigger, State) ->
     DiskStat = parse_diskstat(RawDiskStat, []),
 
     %% Check idle total CPU
-    Idle = list_to_binary(os:cmd("mpstat 1 1 | grep Average | awk -F ' ' '{print $12}'")),
+    [Idle | _] = re:split(os:cmd("mpstat 1 1 | grep Average | awk -F ' ' '{print $12}'"), "\n", [{return, binary}]),
 
     Report = [
         {<<"memory">>,
