@@ -56,15 +56,17 @@ handle_info(trigger, State) ->
     %% Check idle total CPU
     Idle = os:cmd("mpstat 1 1 | grep Average | awk -F ' ' '{print $12}'"),
 
-    Report = jsx:encode([
+    Report = [
         {<<"memory">>,
             [{<<"total">>, Total}, {<<"free">>, Free}]
         },
         {<<"disk">>, DiskStat},
         {<<"idle_cpu">>, Idle}
-    ]),
+    ],
+    lager:info("Encoding ~p", [Report]),
+    JsonReport = jsx:encode(Report),
 
-    spread:post([<<"os_monitor">>, State#state.self], Report),
+    spread:post([<<"os_monitor">>, State#state.self], JsonReport),
     {noreply, State};
 handle_info(_Info, State) ->
     lager:info("UNKNOWN Update ~p", [_Info]),
