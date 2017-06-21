@@ -1,0 +1,17 @@
+{application, spread_os_monitor,
+ [{description, "Monitors the machine and reports in Spread"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, { spread_os_monitor_app, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    spread
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, []},
+  {licenses, []},
+  {links, []}
+ ]}.
