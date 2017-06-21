@@ -31,10 +31,10 @@
 
 start_link() ->
     %% Make sure the cron job is started
-    erlang:send_after(?INTERVAL, self(), trigger),
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([]) ->
+    erlang:send_after(?INTERVAL, self(), trigger),
     {ok, #state{self = ?SELF}}.
 
 handle_call(_Request, _From, State) ->
