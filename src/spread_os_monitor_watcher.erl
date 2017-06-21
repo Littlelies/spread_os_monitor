@@ -47,20 +47,20 @@ handle_info(trigger, State) ->
     erlang:send_after(?INTERVAL, self(), trigger),
 
     %% Check memory
-    [_, Total, Free, _] = re:split(os:cmd("vmstat -s | grep 'total memory\\|free memory'"), "[^\\d]+", [{return, list}]),
+    [_, Total, Free, _] = re:split(os:cmd("vmstat -s | grep 'total memory\\|free memory'"), "[^\\d]+", [{return, binary}]),
 
     %% Check disk
-    RawDiskStat = re:split(os:cmd("df --output=target,pcent | tail -n +2"), "[ \n]+", [{return, list}]),
+    RawDiskStat = re:split(os:cmd("df --output=target,pcent | tail -n +2"), "[ \n]+", [{return, binary}]),
     DiskStat = parse_diskstat(RawDiskStat, []),
 
     %% Check idle total CPU
-    Idle = os:cmd("mpstat 1 1 | grep Average | awk -F ' ' '{print $12}'"),
+    Idle = list_to_binary(os:cmd("mpstat 1 1 | grep Average | awk -F ' ' '{print $12}'")),
 
     Report = [
         {<<"memory">>,
             [{<<"total">>, Total}, {<<"free">>, Free}]
         },
-        %{<<"disk">>, DiskStat},
+        {<<"disk">>, DiskStat},
         {<<"idle_cpu">>, Idle}
     ],
     JsonReport = jsx:encode(Report),
